@@ -1,0 +1,6 @@
+<resources>
+    <string name="app_name">RelaxingSounds</string>
+    <string name="title_category">Kitaplık</string>
+    <string name="title_favorites">Favorilerim</string>
+    <string name="title_category_sounds">%1$s Sesleri</string>
+</resources>

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data class="CategoryListBinding">
+
+        <import type="java.util.List" />
+
+        <import type="com.msevgi.relaxingsounds.model.Category" />
+
+        <import type="com.msevgi.relaxingsounds.data.DataWrapper" />
+
+        <import type="com.msevgi.relaxingsounds.adapter.CategoryRecyclerAdapter.CategoryItemClickListener" />
+
+        <variable
+            name="dataWrapper"
+            type="DataWrapper&lt;List&lt;Category&gt;&gt;" />
+
+        <variable
+            name="listener"
+            type="CategoryItemClickListener" />
+    </data>
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="#ccc">
+
+        <include
+            android:id="@+id/toolbar"
+            layout="@layout/toolbar" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/recyclerview_products"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/toolbar"
+            android:clipToPadding="true"
+            android:padding="@dimen/default_padding"
+            app:categoryEntries="@{dataWrapper.getData()}"
+            app:listener="@{listener}" />
+
+        <ProgressBar
+            style="@style/DefaultProgressBar"
+            android:visibility="@{dataWrapper}" />
+
+    </RelativeLayout>
+</layout>

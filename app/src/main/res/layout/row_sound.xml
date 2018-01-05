@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:card_view="http://schemas.android.com/apk/res-auto">
+
+    <data class="RowSoundBinding">
+
+        <variable
+            name="sound"
+            type="com.msevgi.relaxingsounds.model.Sound" />
+    </data>
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="100dp"
+        android:layout_marginBottom="@dimen/default_margin"
+        android:clipToPadding="false"
+        card_view:cardCornerRadius="4dp">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/default_padding">
+
+            <TextView
+                android:id="@+id/tvTitle"
+                style="@style/TextStyle"
+                android:text="@{sound.name}" />
+
+            <SeekBar
+                android:id="@+id/sbVolume"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:layout_toStartOf="@+id/ivLikeUnlike"
+                android:max="100" />
+
+            <ImageView
+                android:id="@+id/ivPlayPause"
+                android:layout_width="@dimen/toggle_width"
+                android:layout_height="@dimen/toggle_width"
+                android:layout_alignParentBottom="true"
+                android:layout_alignParentEnd="true"
+                android:padding="@dimen/size_2x"
+                card_view:srcCompat="@drawable/ic_play" />
+
+            <ImageView
+                android:id="@+id/ivLikeUnlike"
+                android:layout_width="@dimen/toggle_width"
+                android:layout_height="@dimen/toggle_width"
+                android:layout_alignParentBottom="true"
+                android:layout_toStartOf="@+id/ivPlayPause"
+                android:padding="@dimen/size_2x"
+                card_view:srcCompat="@drawable/ic_unlike" />
+        </RelativeLayout>
+    </android.support.v7.widget.CardView>
+</layout>
