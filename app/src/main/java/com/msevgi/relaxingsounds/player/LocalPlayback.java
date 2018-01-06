@@ -26,6 +26,7 @@ import android.os.PowerManager;
 import android.support.v4.media.session.PlaybackStateCompat;
 
 import com.msevgi.relaxingsounds.model.Sound;
+import com.msevgi.relaxingsounds.player.service.MusicService;
 
 import java.util.HashMap;
 import java.util.HashSet;

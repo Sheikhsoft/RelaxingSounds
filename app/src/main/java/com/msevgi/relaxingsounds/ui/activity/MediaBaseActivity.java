@@ -4,7 +4,9 @@ import android.content.ComponentName;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.RemoteException;
+import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.media.MediaBrowserCompat;
 import android.support.v4.media.MediaMetadataCompat;
@@ -13,7 +15,9 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.support.v7.app.AppCompatActivity;
 
-import com.msevgi.relaxingsounds.player.MusicService;
+import com.msevgi.relaxingsounds.R;
+import com.msevgi.relaxingsounds.player.service.MusicService;
+import com.msevgi.relaxingsounds.ui.fragment.BaseFragment;
 
 /**
  * Created by mustafasevgi on 6.01.2018.
@@ -23,6 +27,13 @@ public abstract class MediaBaseActivity extends AppCompatActivity {
     public static final String ACTION_SESSION_CONNECTED = "action.session.connected";
     public static final String ACTION_PLAY_STATE_CHANGED = "action.state.changed";
     public static final String EXTRA_STATE = "extra.state";
+
+    public static final int TRANSITION_TYPE_ADD = 1;
+    public static final int TRANSITION_TYPE_REPLACE = 2;
+
+    @IntDef({MediaBaseActivity.TRANSITION_TYPE_ADD, MediaBaseActivity.TRANSITION_TYPE_REPLACE})
+    public @interface transitionType {
+    }
 
     private MediaBrowserCompat mMediaBrowser;
 
@@ -97,12 +108,6 @@ public abstract class MediaBaseActivity extends AppCompatActivity {
     }
 
     private void connectToSession(MediaSessionCompat.Token token) throws RemoteException {
-        //Uygulama her arkaya atılıp geri gelme durumunda yeni callback register oluyordu
-        //bu durum da birden fazla metadata change cağrısı yapıyordu
-        //onStart içerisinde bulunan connect buna sebep oluyor
-        //onCreate onDestroy denenebilir ancak şu an bişi yapmıyoruz.
-        //onun yerine workAround olarak bir önceki mediaControllerdan mevcut callback i
-        //kaldırıp yeniden ekliyoruz
         MediaControllerCompat mediaController = MediaControllerCompat.getMediaController(this);
         if (mediaController != null) {
             mediaController.unregisterCallback(mMediaControllerCallback);
@@ -111,6 +116,11 @@ public abstract class MediaBaseActivity extends AppCompatActivity {
         MediaControllerCompat.setMediaController(this, mediaController);
         mediaController.registerCallback(mMediaControllerCallback);
         sendBroadcastIntentForAction(ACTION_SESSION_CONNECTED, null);
+        sessionConnected();
+    }
+
+    public void sessionConnected() {
+
     }
 
     protected void sendBroadcastIntentForAction(String action, Bundle bundle) {
@@ -119,5 +129,21 @@ public abstract class MediaBaseActivity extends AppCompatActivity {
             intent.putExtras(bundle);
         }
         LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(intent);
+    }
+
+    public void showFragment(BaseFragment fragment, @MainActivity.transitionType int transitionType) {
+        if (!isDestroyed()) {
+            String tag = fragment.getClass().getName();
+            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
+            switch (transitionType) {
+                case TRANSITION_TYPE_ADD:
+                    transaction.add(R.id.flContainer, fragment, tag);
+                    break;
+                case TRANSITION_TYPE_REPLACE:
+                    transaction.replace(R.id.flContainer, fragment, tag);
+                    break;
+            }
+            transaction.addToBackStack(tag).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+        }
     }
 }

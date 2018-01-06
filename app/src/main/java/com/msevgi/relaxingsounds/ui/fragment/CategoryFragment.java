@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.msevgi.relaxingsounds.R;
+import com.msevgi.relaxingsounds.ui.activity.MediaBaseActivity;
 import com.msevgi.relaxingsounds.utils.ToolbarOptions;
 import com.msevgi.relaxingsounds.adapter.CategoryRecyclerAdapter;
 import com.msevgi.relaxingsounds.data.DataState;
@@ -59,6 +60,6 @@ public class CategoryFragment extends BaseFragment implements CategoryRecyclerAd
 
     @Override
     public void onItemClick(Category category, int position) {
-        ((MainActivity) getActivity()).showFragment(CategorySoundsFragment.newInstance(category),MainActivity.TRANSITION_TYPE_ADD);
+        ((MainActivity) getActivity()).showFragment(CategorySoundsFragment.newInstance(category), MediaBaseActivity.TRANSITION_TYPE_ADD);
     }
 }

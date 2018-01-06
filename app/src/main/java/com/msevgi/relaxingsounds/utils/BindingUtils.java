@@ -28,7 +28,12 @@ public class BindingUtils {
         if (entries != null) {
             LinearLayoutManager manager = new LinearLayoutManager(recyclerView.getContext(), LinearLayoutManager.VERTICAL, false);
             recyclerView.setLayoutManager(manager);
+
             recyclerView.setHasFixedSize(true);
+
+            RecyclerViewItemDecoration decoration = new RecyclerViewItemDecoration(recyclerView.getContext());
+            recyclerView.addItemDecoration(decoration);
+
             CategoryRecyclerAdapter adapter = new CategoryRecyclerAdapter(entries, itemClickListener);
             recyclerView.setAdapter(adapter);
         }
@@ -40,7 +45,12 @@ public class BindingUtils {
         if (entries != null) {
             LinearLayoutManager manager = new LinearLayoutManager(recyclerView.getContext(), LinearLayoutManager.VERTICAL, false);
             recyclerView.setLayoutManager(manager);
+
             recyclerView.setHasFixedSize(true);
+
+            RecyclerViewItemDecoration decoration = new RecyclerViewItemDecoration(recyclerView.getContext());
+            recyclerView.addItemDecoration(decoration);
+
             SoundRecyclerAdapter adapter = new SoundRecyclerAdapter(entries, itemClickListener);
             recyclerView.setAdapter(adapter);
         }

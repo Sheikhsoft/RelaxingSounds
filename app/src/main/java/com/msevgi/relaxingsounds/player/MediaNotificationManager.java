@@ -40,6 +40,7 @@ import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 
 import com.msevgi.relaxingsounds.R;
+import com.msevgi.relaxingsounds.player.service.MusicService;
 import com.msevgi.relaxingsounds.ui.activity.MainActivity;
 import com.msevgi.relaxingsounds.utils.Utils;
 
@@ -191,7 +192,6 @@ public class MediaNotificationManager extends BroadcastReceiver {
     private PendingIntent createContentIntent() {
         Intent openUI = new Intent(mService, MainActivity.class);
         openUI.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        openUI.putExtra(MainActivity.EXTRA_START_FULLSCREEN, true);
         return PendingIntent.getActivity(mService, REQUEST_CODE, openUI,
                 PendingIntent.FLAG_CANCEL_CURRENT);
     }

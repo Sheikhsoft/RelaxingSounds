@@ -16,6 +16,7 @@
 package com.msevgi.relaxingsounds.player;
 
 import com.msevgi.relaxingsounds.model.Sound;
+import com.msevgi.relaxingsounds.player.service.MusicService;
 
 /**
  * Interface representing either Local or Remote Playback. The {@link MusicService} works

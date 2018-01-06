@@ -19,7 +19,7 @@ import com.msevgi.relaxingsounds.adapter.SoundRecyclerAdapter;
 import com.msevgi.relaxingsounds.databinding.SoundListBinding;
 import com.msevgi.relaxingsounds.model.Sound;
 import com.msevgi.relaxingsounds.player.LogHelper;
-import com.msevgi.relaxingsounds.player.MusicService;
+import com.msevgi.relaxingsounds.player.service.MusicService;
 import com.msevgi.relaxingsounds.player.PlaybackManager;
 import com.msevgi.relaxingsounds.ui.activity.MediaBaseActivity;
 import com.msevgi.relaxingsounds.viewmodel.SoundViewModel;

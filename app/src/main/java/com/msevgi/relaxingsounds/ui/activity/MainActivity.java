@@ -2,17 +2,19 @@ package com.msevgi.relaxingsounds.ui.activity;
 
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
-import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
+import android.support.v4.media.MediaMetadataCompat;
+import android.support.v4.media.session.MediaControllerCompat;
+import android.support.v4.media.session.PlaybackStateCompat;
 import android.view.MenuItem;
+import android.view.View;
 
 import com.msevgi.relaxingsounds.R;
 import com.msevgi.relaxingsounds.databinding.MainBinding;
-import com.msevgi.relaxingsounds.ui.fragment.BaseFragment;
+import com.msevgi.relaxingsounds.player.service.MusicService;
 import com.msevgi.relaxingsounds.ui.fragment.CategoryFragment;
 import com.msevgi.relaxingsounds.ui.fragment.LikedSoundsFragment;
 
@@ -20,16 +22,8 @@ import com.msevgi.relaxingsounds.ui.fragment.LikedSoundsFragment;
  * Created by mustafasevgi on 3.01.2018.
  */
 
-public class MainActivity extends MediaBaseActivity {
-
-    public static final int TRANSITION_TYPE_ADD = 1;
-    public static final int TRANSITION_TYPE_REPLACE = 2;
-    public static final String EXTRA_CURRENT_MEDIA_DESCRIPTION = "agrre";
-    public static final String EXTRA_START_FULLSCREEN = "fagerer";
-
-    @IntDef({TRANSITION_TYPE_ADD, TRANSITION_TYPE_REPLACE})
-    public @interface transitionType {
-    }
+public class MainActivity extends MediaBaseActivity implements View.OnClickListener {
+    private MainBinding mBinding;
 
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
@@ -51,12 +45,13 @@ public class MainActivity extends MediaBaseActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        final MainBinding mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mBinding.navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
         if (savedInstanceState == null) {
             showFragment(new CategoryFragment(), TRANSITION_TYPE_REPLACE);
             mBinding.navigation.setSelectedItemId(R.id.navigation_home);
         }
+        mBinding.ivPlayPause.setOnClickListener(this);
     }
 
     @Override
@@ -78,19 +73,35 @@ public class MainActivity extends MediaBaseActivity {
             super.onBackPressed();
     }
 
-    public void showFragment(BaseFragment fragment, @transitionType int transitionType) {
-        if (!isDestroyed()) {
-            String tag = fragment.getClass().getName();
-            FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
-            switch (transitionType) {
-                case TRANSITION_TYPE_ADD:
-                    transaction.add(R.id.flContainer, fragment, tag);
-                    break;
-                case TRANSITION_TYPE_REPLACE:
-                    transaction.replace(R.id.flContainer, fragment, tag);
-                    break;
+    @Override
+    public void sessionConnected() {
+        updateMiniPlayer();
+    }
+
+    @Override
+    protected void onStateChanged(PlaybackStateCompat state) {
+        updateMiniPlayer();
+    }
+
+    private void updateMiniPlayer() {
+        MediaControllerCompat supportController = MediaControllerCompat.getMediaController(this);
+        MediaMetadataCompat metadataCompat;
+        if (supportController != null) {
+            metadataCompat = supportController.getMetadata();
+            if (metadataCompat != null) {
+                String[] ids = metadataCompat.getBundle().getStringArray(MusicService.EXTRA_PLAYING_IDS);
+                if (ids != null && ids.length > 0) {
+                    mBinding.ivPlayPause.setImageResource(R.drawable.ic_pause);
+                } else
+                    mBinding.ivPlayPause.setImageResource(R.drawable.ic_play);
             }
-            transaction.addToBackStack(tag).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_FADE).commit();
+        }
+    }
+
+    @Override
+    public void onClick(View v) {
+        switch (v.getId()) {
+            case R.id.ivPlayPause:
         }
     }
 }
