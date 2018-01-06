@@ -37,7 +37,7 @@
                 android:layout_toStartOf="@+id/ivLikeUnlike"
                 android:clickable="true"
                 android:max="100"
-                android:progress="25" />
+                android:progress="@{sound.volume}" />
 
             <ImageView
                 android:id="@+id/ivPlayPause"
