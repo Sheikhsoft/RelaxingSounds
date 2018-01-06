@@ -42,9 +42,6 @@ public class SoundViewModel extends ViewModel {
             @Override
             public void onResponse(Call<ArrayList<Sound>> call, @NonNull Response<ArrayList<Sound>> response) {
                 if (response.body() != null && response.body().size() > 0) {
-                    for (Sound sound : response.body()) {
-                        setSoundResourceId(sound);
-                    }
                     soundLiveData.setValue(BeanFactory.success(response.body()));
                 }
             }
@@ -57,31 +54,6 @@ public class SoundViewModel extends ViewModel {
 
     }
 
-    private void setSoundResourceId(Sound sound) {
-        switch (sound.getId()) {
-            case "1":
-                sound.setResourceId(R.raw.cricket);
-                break;
-            case "2":
-                sound.setResourceId(R.raw.fire);
-                break;
-            case "3":
-                sound.setResourceId(R.raw.water_drip);
-                break;
-            case "4":
-                sound.setResourceId(R.raw.water_drips);
-                break;
-            case "5":
-                sound.setResourceId(R.raw.water_drips);
-                break;
-            case "6":
-                sound.setResourceId(R.raw.water_drips);
-                break;
-            default:
-                sound.setResourceId(R.raw.rain_under_umbrella);
-                break;
-        }
-    }
 
     public void getCategorySounds(final Category category) {
         soundLiveData.setValue(BeanFactory.fetching(null));
@@ -93,7 +65,6 @@ public class SoundViewModel extends ViewModel {
                     List<Sound> list = new ArrayList<>();
                     for (Sound sound : response.body()) {
                         if (sound.getCategory().equalsIgnoreCase(category.getKey())) {
-                            setSoundResourceId(sound);
                             list.add(sound);
                         }
                     }

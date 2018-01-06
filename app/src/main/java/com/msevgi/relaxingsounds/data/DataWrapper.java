@@ -9,7 +9,5 @@ public interface DataWrapper<T> {
 
     DataState getState();
 
-    boolean hasError();
-
     Error getError();
 }

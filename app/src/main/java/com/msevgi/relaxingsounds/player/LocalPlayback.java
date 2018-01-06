@@ -21,6 +21,7 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.PowerManager;
 import android.support.v4.media.session.PlaybackStateCompat;
 
@@ -162,7 +163,7 @@ public class LocalPlayback implements Playback, AudioManager.OnAudioFocusChangeL
     }
 
     private MediaPlayer createMediaPlayer(Sound sound) {
-        MediaPlayer mediaPlayer = MediaPlayer.create(mContext, sound.getResourceId());
+        MediaPlayer mediaPlayer = MediaPlayer.create(mContext, Uri.parse(sound.getUri()));
 
         // Make sure the media player will acquire a wake-lock while
         // playing. If we don't do that, the CPU might go to sleep while the

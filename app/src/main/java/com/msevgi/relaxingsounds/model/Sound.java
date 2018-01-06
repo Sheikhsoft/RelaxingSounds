@@ -12,10 +12,18 @@ public class Sound implements Parcelable {
     private String id;
     private String name;
     private String category;
-    private int resourceId;
     private boolean isFavorite;
     private boolean isPlaying = false;
     private int volume = 25;
+    private String uri;
+
+    public String getUri() {
+        return uri;
+    }
+
+    public void setUri(String uri) {
+        this.uri = uri;
+    }
 
     public int getVolume() {
         return volume;
@@ -33,13 +41,6 @@ public class Sound implements Parcelable {
         isPlaying = playing;
     }
 
-    public int getResourceId() {
-        return resourceId;
-    }
-
-    public void setResourceId(int resourceId) {
-        this.resourceId = resourceId;
-    }
 
     public String getId() {
         return id;
@@ -76,7 +77,6 @@ public class Sound implements Parcelable {
     public Sound() {
     }
 
-
     @Override
     public int describeContents() {
         return 0;
@@ -87,20 +87,20 @@ public class Sound implements Parcelable {
         dest.writeString(this.id);
         dest.writeString(this.name);
         dest.writeString(this.category);
-        dest.writeInt(this.resourceId);
         dest.writeByte(this.isFavorite ? (byte) 1 : (byte) 0);
         dest.writeByte(this.isPlaying ? (byte) 1 : (byte) 0);
         dest.writeInt(this.volume);
+        dest.writeString(this.uri);
     }
 
     protected Sound(Parcel in) {
         this.id = in.readString();
         this.name = in.readString();
         this.category = in.readString();
-        this.resourceId = in.readInt();
         this.isFavorite = in.readByte() != 0;
         this.isPlaying = in.readByte() != 0;
         this.volume = in.readInt();
+        this.uri = in.readString();
     }
 
     public static final Parcelable.Creator<Sound> CREATOR = new Parcelable.Creator<Sound>() {

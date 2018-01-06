@@ -4,7 +4,7 @@ package com.msevgi.relaxingsounds.data;
  * Created by mustafasevgi on 3.01.2018.
  */
 
-public class UIDataWrapper<T,C> implements DataWrapper<T> {
+public class UIDataWrapper<T, C> implements DataWrapper<T> {
     private T data;
     private DataState dataState;
     private Error error;
@@ -23,11 +23,6 @@ public class UIDataWrapper<T,C> implements DataWrapper<T> {
     @Override
     public DataState getState() {
         return dataState;
-    }
-
-    @Override
-    public boolean hasError() {
-        return error != null;
     }
 
     @Override
