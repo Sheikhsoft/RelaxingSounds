@@ -63,8 +63,10 @@ public class SoundRecyclerAdapter extends RecyclerView.Adapter<SoundRecyclerAdap
 
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
-                    mList.get(getAdapterPosition()).setVolume(seekBar.getProgress());
-                    mListener.volumeValue(mList.get(getAdapterPosition()), seekBar.getProgress());
+                    if (mListener != null) {
+                        mList.get(getAdapterPosition()).setVolume(seekBar.getProgress());
+                        mListener.volumeValue(mList.get(getAdapterPosition()), seekBar.getProgress());
+                    }
                 }
             });
         }

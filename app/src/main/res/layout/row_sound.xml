@@ -13,12 +13,15 @@
         android:layout_width="match_parent"
         android:layout_height="100dp"
         android:layout_marginBottom="@dimen/default_margin"
+        android:clickable="true"
         android:clipToPadding="false"
+        android:foreground="@drawable/ripple_without_border"
         card_view:cardCornerRadius="4dp">
 
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:background="@drawable/ripple_without_border"
             android:padding="@dimen/default_padding">
 
             <TextView
@@ -32,6 +35,7 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_toStartOf="@+id/ivLikeUnlike"
+                android:clickable="true"
                 android:max="100"
                 android:progress="25" />
 
