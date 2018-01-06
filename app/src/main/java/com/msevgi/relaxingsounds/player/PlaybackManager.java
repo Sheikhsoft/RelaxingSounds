@@ -33,7 +33,7 @@ import java.util.Set;
 public class PlaybackManager implements Playback.Callback {
 
     // Action to thumbs up a media item
-    public static final String CUSTOM_ACTION_PLAY_OR_PAUSE = "custom.action.playOrPause.or.pause";
+    public static final String CUSTOM_ACTION_SOUND_VOLUME = "custom.action.playOrPause.or.pause";
     public static final String EXTRA_SOUND = "extra.sound";
     private Resources mResources;
     private Playback mPlayback;
@@ -68,6 +68,10 @@ public class PlaybackManager implements Playback.Callback {
     public void handlePlayRequest() {
         mServiceCallback.onPlaybackStart();
         mPlayback.play();
+    }
+
+    private void handleSoundVolume(Sound sound) {
+        mPlayback.setSoundVolume(sound);
     }
 
     /**
@@ -185,8 +189,20 @@ public class PlaybackManager implements Playback.Callback {
         public void onStop() {
             handleStopRequest(null);
         }
-    }
 
+        @Override
+        public void onCustomAction(String action, Bundle extras) {
+            if (extras != null) {
+                extras.setClassLoader(getClass().getClassLoader());
+                if (action.equals(CUSTOM_ACTION_SOUND_VOLUME)) {
+                    Sound sound = extras.getParcelable(EXTRA_SOUND);
+                    if (sound != null) {
+                        handleSoundVolume(sound);
+                    }
+                }
+            }
+        }
+    }
 
     public interface PlaybackServiceCallback {
         void onPlaybackStart();

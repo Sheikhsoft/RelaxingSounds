@@ -21,7 +21,6 @@ import android.content.Intent;
 import android.content.IntentFilter;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
-import android.net.wifi.WifiManager;
 import android.os.PowerManager;
 import android.support.v4.media.session.PlaybackStateCompat;
 
@@ -110,7 +109,14 @@ public class LocalPlayback implements Playback, AudioManager.OnAudioFocusChangeL
         return ids;
     }
 
-
+    @Override
+    public void setSoundVolume(Sound sound) {
+        MediaPlayer mediaPlayer = mPlayers.get(sound.getId());
+        if (mediaPlayer != null && mediaPlayer.isPlaying()) {
+            float volume = convertSeekbarProgressToMediaPlayerVolume(sound);
+            mediaPlayer.setVolume(volume, volume);
+        }
+    }
 
     @Override
     public void stop(boolean notifyListeners) {
@@ -151,6 +157,10 @@ public class LocalPlayback implements Playback, AudioManager.OnAudioFocusChangeL
         return false;
     }
 
+    private float convertSeekbarProgressToMediaPlayerVolume(Sound sound) {
+        return (float) sound.getVolume() / 100;
+    }
+
     private MediaPlayer createMediaPlayer(Sound sound) {
         MediaPlayer mediaPlayer = MediaPlayer.create(mContext, sound.getResourceId());
 
@@ -162,6 +172,8 @@ public class LocalPlayback implements Playback, AudioManager.OnAudioFocusChangeL
 
         // we want the media player to notify us when it's ready preparing,
         // and when it's done playing:
+        float volume = convertSeekbarProgressToMediaPlayerVolume(sound);
+        mediaPlayer.setVolume(volume, volume);
         mediaPlayer.setOnPreparedListener(this);
         mediaPlayer.setOnCompletionListener(this);
         mediaPlayer.setOnErrorListener(this);

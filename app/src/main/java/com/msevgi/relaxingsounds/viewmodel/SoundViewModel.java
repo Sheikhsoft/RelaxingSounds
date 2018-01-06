@@ -43,27 +43,7 @@ public class SoundViewModel extends ViewModel {
             public void onResponse(Call<ArrayList<Sound>> call, @NonNull Response<ArrayList<Sound>> response) {
                 if (response.body() != null && response.body().size() > 0) {
                     for (Sound sound : response.body()) {
-                        switch (sound.getId()) {
-                            case "1":
-                                sound.setResourceId(R.raw.cricket);
-                                break;
-                            case "2":
-                                sound.setResourceId(R.raw.fire);
-                                break;
-                            case "3":
-                                sound.setResourceId(R.raw.water_drip);
-                                break;
-                            case "4":
-                                sound.setResourceId(R.raw.water_drips);
-                                break;
-                            case "5":
-                                break;
-                            case "6":
-                                break;
-                            default:
-                                sound.setResourceId(R.raw.rain_under_umbrella);
-                                break;
-                        }
+                        setSoundResourceId(sound);
                     }
                     soundLiveData.setValue(BeanFactory.success(response.body()));
                 }
@@ -77,15 +57,47 @@ public class SoundViewModel extends ViewModel {
 
     }
 
-    public void getCategorySounds(Category category) {
+    private void setSoundResourceId(Sound sound) {
+        switch (sound.getId()) {
+            case "1":
+                sound.setResourceId(R.raw.cricket);
+                break;
+            case "2":
+                sound.setResourceId(R.raw.fire);
+                break;
+            case "3":
+                sound.setResourceId(R.raw.water_drip);
+                break;
+            case "4":
+                sound.setResourceId(R.raw.water_drips);
+                break;
+            case "5":
+                sound.setResourceId(R.raw.water_drips);
+                break;
+            case "6":
+                sound.setResourceId(R.raw.water_drips);
+                break;
+            default:
+                sound.setResourceId(R.raw.rain_under_umbrella);
+                break;
+        }
+    }
+
+    public void getCategorySounds(final Category category) {
         soundLiveData.setValue(BeanFactory.fetching(null));
 
         ApiModule.getInstance().getService().serviceCategorySoundList().enqueue(new Callback<ArrayList<Sound>>() {
             @Override
             public void onResponse(Call<ArrayList<Sound>> call, @NonNull Response<ArrayList<Sound>> response) {
                 if (response.body() != null && response.body().size() > 0) {
-                    // TODO: 5.01.2018 filter with category
-                    soundLiveData.setValue(BeanFactory.success(response.body()));
+                    List<Sound> list = new ArrayList<>();
+                    for (Sound sound : response.body()) {
+                        if (sound.getCategory().equalsIgnoreCase(category.getKey())) {
+                            setSoundResourceId(sound);
+                            list.add(sound);
+                        }
+                    }
+                    soundLiveData.setValue(BeanFactory.success(list));
                 }
             }
 

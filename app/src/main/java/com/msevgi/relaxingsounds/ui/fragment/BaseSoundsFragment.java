@@ -18,6 +18,7 @@ import com.msevgi.relaxingsounds.R;
 import com.msevgi.relaxingsounds.adapter.SoundRecyclerAdapter;
 import com.msevgi.relaxingsounds.databinding.SoundListBinding;
 import com.msevgi.relaxingsounds.model.Sound;
+import com.msevgi.relaxingsounds.player.LogHelper;
 import com.msevgi.relaxingsounds.player.MusicService;
 import com.msevgi.relaxingsounds.player.PlaybackManager;
 import com.msevgi.relaxingsounds.ui.activity.MediaBaseActivity;
@@ -32,6 +33,7 @@ import java.util.Set;
  */
 
 public abstract class BaseSoundsFragment extends BaseFragment implements SoundRecyclerAdapter.SoundItemClickListener {
+    public final String TAG = LogHelper.makeLogTag(BaseSoundsFragment.class);
     protected SoundListBinding mBinding;
     protected SoundViewModel mSoundViewModel;
     BroadcastReceiver mediaUpdatedReceiver = new BroadcastReceiver() {
@@ -83,8 +85,11 @@ public abstract class BaseSoundsFragment extends BaseFragment implements SoundRe
     }
 
     @Override
-    public void volumeValue(int value, int position) {
-
+    public void volumeValue(Sound sound, int value) {
+        LogHelper.d(TAG, "volume value :", value);
+        Bundle bundle = new Bundle();
+        bundle.putParcelable(PlaybackManager.EXTRA_SOUND, sound);
+        MediaControllerCompat.getMediaController(getActivity()).getTransportControls().sendCustomAction(PlaybackManager.CUSTOM_ACTION_SOUND_VOLUME, bundle);
     }
 
     public void playOrPause(final Sound sound) {

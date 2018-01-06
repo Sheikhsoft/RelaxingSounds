@@ -49,6 +49,8 @@ public interface Playback {
 
     void play();
 
+    void setSoundVolume(Sound sound);
+
     void pause();
 
     interface Callback {

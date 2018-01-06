@@ -53,7 +53,7 @@ public class SoundRecyclerAdapter extends RecyclerView.Adapter<SoundRecyclerAdap
             mBinding.sbVolume.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
                 @Override
                 public void onProgressChanged(SeekBar seekBar, int progress, boolean fromUser) {
-                    mListener.volumeValue(progress, getAdapterPosition());
+
                 }
 
                 @Override
@@ -63,7 +63,8 @@ public class SoundRecyclerAdapter extends RecyclerView.Adapter<SoundRecyclerAdap
 
                 @Override
                 public void onStopTrackingTouch(SeekBar seekBar) {
-
+                    mList.get(getAdapterPosition()).setVolume(seekBar.getProgress());
+                    mListener.volumeValue(mList.get(getAdapterPosition()), seekBar.getProgress());
                 }
             });
         }
@@ -95,6 +96,6 @@ public class SoundRecyclerAdapter extends RecyclerView.Adapter<SoundRecyclerAdap
 
         void likeOrUnlike(Sound sound, int position);
 
-        void volumeValue(int value, int position);
+        void volumeValue(Sound sound, int value);
     }
 }

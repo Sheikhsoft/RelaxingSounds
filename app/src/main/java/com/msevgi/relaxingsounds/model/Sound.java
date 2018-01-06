@@ -14,7 +14,16 @@ public class Sound implements Parcelable {
     private String category;
     private int resourceId;
     private boolean isFavorite;
-    private boolean isPlaying=false;
+    private boolean isPlaying = false;
+    private int volume = 25;
+
+    public int getVolume() {
+        return volume;
+    }
+
+    public void setVolume(int volume) {
+        this.volume = volume;
+    }
 
     public boolean isPlaying() {
         return isPlaying;
@@ -67,6 +76,7 @@ public class Sound implements Parcelable {
     public Sound() {
     }
 
+
     @Override
     public int describeContents() {
         return 0;
@@ -79,6 +89,8 @@ public class Sound implements Parcelable {
         dest.writeString(this.category);
         dest.writeInt(this.resourceId);
         dest.writeByte(this.isFavorite ? (byte) 1 : (byte) 0);
+        dest.writeByte(this.isPlaying ? (byte) 1 : (byte) 0);
+        dest.writeInt(this.volume);
     }
 
     protected Sound(Parcel in) {
@@ -87,6 +99,8 @@ public class Sound implements Parcelable {
         this.category = in.readString();
         this.resourceId = in.readInt();
         this.isFavorite = in.readByte() != 0;
+        this.isPlaying = in.readByte() != 0;
+        this.volume = in.readInt();
     }
 
     public static final Parcelable.Creator<Sound> CREATOR = new Parcelable.Creator<Sound>() {
