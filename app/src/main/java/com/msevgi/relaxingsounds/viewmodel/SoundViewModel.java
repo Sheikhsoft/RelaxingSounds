@@ -4,6 +4,7 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
 
+import com.msevgi.relaxingsounds.R;
 import com.msevgi.relaxingsounds.api.ApiModule;
 import com.msevgi.relaxingsounds.data.BeanFactory;
 import com.msevgi.relaxingsounds.data.DataWrapper;
@@ -12,6 +13,7 @@ import com.msevgi.relaxingsounds.model.Sound;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import retrofit2.Call;
 import retrofit2.Callback;
@@ -36,10 +38,33 @@ public class SoundViewModel extends ViewModel {
     public void getLikedSounds() {
         soundLiveData.setValue(BeanFactory.fetching(null));
 
-        ApiModule.getInstance().getService().serviceFavoriteSoundList().enqueue(new Callback<ArrayList<Sound>>() {
+        ApiModule.getInstance().getService().serviceCategorySoundList().enqueue(new Callback<ArrayList<Sound>>() {
             @Override
             public void onResponse(Call<ArrayList<Sound>> call, @NonNull Response<ArrayList<Sound>> response) {
                 if (response.body() != null && response.body().size() > 0) {
+                    for (Sound sound : response.body()) {
+                        switch (sound.getId()) {
+                            case "1":
+                                sound.setResourceId(R.raw.cricket);
+                                break;
+                            case "2":
+                                sound.setResourceId(R.raw.fire);
+                                break;
+                            case "3":
+                                sound.setResourceId(R.raw.water_drip);
+                                break;
+                            case "4":
+                                sound.setResourceId(R.raw.water_drips);
+                                break;
+                            case "5":
+                                break;
+                            case "6":
+                                break;
+                            default:
+                                sound.setResourceId(R.raw.rain_under_umbrella);
+                                break;
+                        }
+                    }
                     soundLiveData.setValue(BeanFactory.success(response.body()));
                 }
             }
@@ -55,7 +80,7 @@ public class SoundViewModel extends ViewModel {
     public void getCategorySounds(Category category) {
         soundLiveData.setValue(BeanFactory.fetching(null));
 
-        ApiModule.getInstance().getService().serviceFavoriteSoundList().enqueue(new Callback<ArrayList<Sound>>() {
+        ApiModule.getInstance().getService().serviceCategorySoundList().enqueue(new Callback<ArrayList<Sound>>() {
             @Override
             public void onResponse(Call<ArrayList<Sound>> call, @NonNull Response<ArrayList<Sound>> response) {
                 if (response.body() != null && response.body().size() > 0) {
@@ -74,5 +99,14 @@ public class SoundViewModel extends ViewModel {
 
     public MutableLiveData<DataWrapper<List<Sound>>> getSoundLiveData() {
         return soundLiveData;
+    }
+
+    public void updatePlayingRows(List<Sound> list, Set<String> ids) {
+        for (Sound sound : list) {
+            if (ids.contains(sound.getId())) {
+                sound.setPlaying(true);
+            } else
+                sound.setPlaying(false);
+        }
     }
 }

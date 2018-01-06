@@ -13,26 +13,20 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.uamp.playback;
+package com.msevgi.relaxingsounds.player;
 
-import com.example.android.uamp.MusicService;
-
-import static android.support.v4.media.session.MediaSessionCompat.QueueItem;
+import com.msevgi.relaxingsounds.model.Sound;
 
 /**
  * Interface representing either Local or Remote Playback. The {@link MusicService} works
  * directly with an instance of the Playback object to make the various calls such as
- * play, pause etc.
+ * playOrPause, pause etc.
  */
 public interface Playback {
-    /**
-     * Start/setup the playback.
-     * Resources/listeners would be allocated by implementations.
-     */
-    void start();
 
     /**
      * Stop the playback. All resources can be de-allocated by implementations here.
+     *
      * @param notifyListeners if true and a callback has been set by setCallback,
      *                        callback.onPlaybackStatusChanged will be called after changing
      *                        the state.
@@ -40,19 +34,9 @@ public interface Playback {
     void stop(boolean notifyListeners);
 
     /**
-     * Set the latest playback state as determined by the caller.
-     */
-    void setState(int state);
-
-    /**
      * Get the current {@link android.media.session.PlaybackState#getState()}
      */
     int getState();
-
-    /**
-     * @return boolean that indicates that this is ready to be used.
-     */
-    boolean isConnected();
 
     /**
      * @return boolean indicating whether the player is playing or is supposed to be
@@ -60,31 +44,19 @@ public interface Playback {
      */
     boolean isPlaying();
 
-    /**
-     * @return pos if currently playing an item
-     */
-    long getCurrentStreamPosition();
 
-    /**
-     * Queries the underlying stream and update the internal last known stream position.
-     */
-    void updateLastKnownStreamPosition();
+    void play(Sound item);
 
-    void play(QueueItem item);
+    void play();
 
     void pause();
-
-    void seekTo(long position);
-
-    void setCurrentMediaId(String mediaId);
-
-    String getCurrentMediaId();
 
     interface Callback {
         /**
          * On current music completed.
          */
         void onCompletion();
+
         /**
          * on Playback status changed
          * Implementations can use this callback to update
@@ -97,10 +69,6 @@ public interface Playback {
          */
         void onError(String error);
 
-        /**
-         * @param mediaId being currently played
-         */
-        void setCurrentMediaId(String mediaId);
     }
 
     void setCallback(Callback callback);

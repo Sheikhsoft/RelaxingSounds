@@ -32,7 +32,8 @@
                 android:layout_height="wrap_content"
                 android:layout_alignParentBottom="true"
                 android:layout_toStartOf="@+id/ivLikeUnlike"
-                android:max="100" />
+                android:max="100"
+                android:progress="25" />
 
             <ImageView
                 android:id="@+id/ivPlayPause"
@@ -41,7 +42,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_alignParentEnd="true"
                 android:padding="@dimen/size_2x"
-                card_view:srcCompat="@drawable/ic_play" />
+                android:src="@{sound.playing ? @drawable/ic_pause : @drawable/ic_play}" />
 
             <ImageView
                 android:id="@+id/ivLikeUnlike"
@@ -50,7 +51,7 @@
                 android:layout_alignParentBottom="true"
                 android:layout_toStartOf="@+id/ivPlayPause"
                 android:padding="@dimen/size_2x"
-                card_view:srcCompat="@drawable/ic_unlike" />
+                android:src="@{sound}" />
         </RelativeLayout>
     </android.support.v7.widget.CardView>
 </layout>

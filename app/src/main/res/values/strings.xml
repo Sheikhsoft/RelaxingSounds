@@ -3,4 +3,9 @@
     <string name="title_category">Kitaplık</string>
     <string name="title_favorites">Favorilerim</string>
     <string name="title_category_sounds">%1$s Sesleri</string>
+    <string name="label_pause">Pause</string>
+    <string name="label_play">Play</string>
+
+    <string name="notification_channel">RS_Channel_ID</string>
+    <string name="notification_channel_description">Channel ID for RS</string>
 </resources>

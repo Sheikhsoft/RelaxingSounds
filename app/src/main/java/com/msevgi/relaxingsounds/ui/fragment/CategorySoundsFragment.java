@@ -44,6 +44,7 @@ public class CategorySoundsFragment extends BaseSoundsFragment {
             public void onChanged(@Nullable DataWrapper<List<Sound>> listDataWrapper) {
                 if (listDataWrapper.getState().ordinal() == DataState.SUCCESS.ordinal()) {
                     mBinding.setDataWrapper(listDataWrapper);
+                    updatePlayingRows();
                     mBinding.setListener(CategorySoundsFragment.this);
                 }
 

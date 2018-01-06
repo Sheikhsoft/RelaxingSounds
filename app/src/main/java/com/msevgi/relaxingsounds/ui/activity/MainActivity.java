@@ -6,8 +6,8 @@ import android.support.annotation.IntDef;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 
 import com.msevgi.relaxingsounds.R;
@@ -20,10 +20,12 @@ import com.msevgi.relaxingsounds.ui.fragment.LikedSoundsFragment;
  * Created by mustafasevgi on 3.01.2018.
  */
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends MediaBaseActivity {
 
     public static final int TRANSITION_TYPE_ADD = 1;
     public static final int TRANSITION_TYPE_REPLACE = 2;
+    public static final String EXTRA_CURRENT_MEDIA_DESCRIPTION = "agrre";
+    public static final String EXTRA_START_FULLSCREEN = "fagerer";
 
     @IntDef({TRANSITION_TYPE_ADD, TRANSITION_TYPE_REPLACE})
     public @interface transitionType {
@@ -49,11 +51,11 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        MainBinding mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
+        final MainBinding mBinding = DataBindingUtil.setContentView(this, R.layout.activity_main);
         mBinding.navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
-
         if (savedInstanceState == null) {
             showFragment(new CategoryFragment(), TRANSITION_TYPE_REPLACE);
+            mBinding.navigation.setSelectedItemId(R.id.navigation_home);
         }
     }
 
@@ -69,7 +71,11 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public void onBackPressed() {
-        super.onBackPressed();
+        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.flContainer);
+        if (fragment instanceof CategoryFragment) {
+            finish();
+        } else
+            super.onBackPressed();
     }
 
     public void showFragment(BaseFragment fragment, @transitionType int transitionType) {

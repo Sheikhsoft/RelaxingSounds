@@ -6,8 +6,8 @@ import android.support.v4.app.Fragment;
 import android.support.v7.widget.Toolbar;
 
 import com.msevgi.relaxingsounds.R;
-import com.msevgi.relaxingsounds.utils.ToolbarOptions;
 import com.msevgi.relaxingsounds.ui.activity.MainActivity;
+import com.msevgi.relaxingsounds.utils.ToolbarOptions;
 
 /**
  * Created by mustafasevgi on 4.01.2018.

@@ -16,9 +16,6 @@ public interface Services {
     @GET("categories")
     Call<ArrayList<Category>> serviceCategoryList();
 
-    @GET("favorites")
-    Call<ArrayList<Sound>> serviceFavoriteSoundList();
-
     @GET("sounds")
     Call<ArrayList<Sound>> serviceCategorySoundList();
 }

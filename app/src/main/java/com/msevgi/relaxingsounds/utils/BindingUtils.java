@@ -5,7 +5,9 @@ import android.databinding.BindingConversion;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
+import android.widget.ImageView;
 
+import com.msevgi.relaxingsounds.R;
 import com.msevgi.relaxingsounds.adapter.CategoryRecyclerAdapter;
 import com.msevgi.relaxingsounds.adapter.SoundRecyclerAdapter;
 import com.msevgi.relaxingsounds.data.DataState;
@@ -51,4 +53,13 @@ public class BindingUtils {
         } else
             return View.GONE;
     }
+
+    @BindingAdapter({"android:src"})
+    public static void setImageViewResource(ImageView imageView, Sound sound) {
+        if (sound.isFavorite()) {
+            imageView.setImageResource(R.drawable.ic_like);
+        } else
+            imageView.setImageResource(R.drawable.ic_unlike);
+    }
+
 }

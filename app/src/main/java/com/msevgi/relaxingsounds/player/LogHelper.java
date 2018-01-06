@@ -13,15 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.example.android.uamp.utils;
+package com.msevgi.relaxingsounds.player;
 
 import android.util.Log;
 
-import com.example.android.uamp.BuildConfig;
+import com.msevgi.relaxingsounds.BuildConfig;
+
 
 public class LogHelper {
 
-    private static final String LOG_PREFIX = "uamp_";
+    private static final String LOG_PREFIX = "rs_";
     private static final int LOG_PREFIX_LENGTH = LOG_PREFIX.length();
     private static final int MAX_LOG_TAG_LENGTH = 23;
 
@@ -76,7 +77,7 @@ public class LogHelper {
     }
 
     public static void log(String tag, int level, Throwable t, Object... messages) {
-        if (Log.isLoggable(tag, level)) {
+        if (true) {
             String message;
             if (t == null && messages != null && messages.length == 1) {
                 // handle this common case without the extra cost of creating a stringbuffer:
