@@ -140,7 +140,7 @@ public abstract class BaseSoundsFragment extends BaseFragment implements SoundRe
             MediaMetadataCompat metadataCompat = supportController.getMetadata();
             if (metadataCompat != null) {
                 String[] ids = metadataCompat.getBundle().getStringArray(MusicService.EXTRA_PLAYING_IDS);
-                if (ids != null && ids.length > 0) {
+                if (ids != null) {
                     Set<String> set = new HashSet<String>(Arrays.asList(ids));
                     mSoundViewModel.updatePlayingRows(mBinding.getDataWrapper().getData(), set);
                     if (mBinding.recyclerviewProducts.getAdapter() != null) {
