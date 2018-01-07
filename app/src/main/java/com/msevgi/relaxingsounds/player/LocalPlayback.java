@@ -332,9 +332,7 @@ public class LocalPlayback implements Playback, AudioManager.OnAudioFocusChangeL
             mPlayOnFocusGain = false;
         }
 
-        if (mCallback != null)
-
-        {
+        if (mCallback != null) {
             mCallback.onPlaybackStatusChanged(mState);
         }
 

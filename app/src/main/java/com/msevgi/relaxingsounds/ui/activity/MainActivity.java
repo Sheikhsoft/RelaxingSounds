@@ -24,7 +24,7 @@ import com.msevgi.relaxingsounds.ui.fragment.LikedSoundsFragment;
 
 public class MainActivity extends MediaBaseActivity implements View.OnClickListener {
     private MainBinding mBinding;
-
+    private boolean isPlaying = false;
     private BottomNavigationView.OnNavigationItemSelectedListener mOnNavigationItemSelectedListener = new BottomNavigationView.OnNavigationItemSelectedListener() {
 
         @Override
@@ -91,9 +91,12 @@ public class MainActivity extends MediaBaseActivity implements View.OnClickListe
             if (metadataCompat != null) {
                 String[] ids = metadataCompat.getBundle().getStringArray(MusicService.EXTRA_PLAYING_IDS);
                 if (ids != null && ids.length > 0) {
+                    isPlaying = true;
                     mBinding.ivPlayPause.setImageResource(R.drawable.ic_pause);
-                } else
+                } else {
+                    isPlaying = false;
                     mBinding.ivPlayPause.setImageResource(R.drawable.ic_play);
+                }
             }
         }
     }
@@ -102,6 +105,18 @@ public class MainActivity extends MediaBaseActivity implements View.OnClickListe
     public void onClick(View v) {
         switch (v.getId()) {
             case R.id.ivPlayPause:
+                MediaControllerCompat supportController = MediaControllerCompat.getMediaController(this);
+                if (supportController != null) {
+                    MediaControllerCompat.TransportControls transportControls = supportController.getTransportControls();
+                    if (transportControls != null) {
+                        if (isPlaying) {
+                            transportControls.pause();
+                        } else {
+                            transportControls.play();
+                        }
+                    }
+                }
+                break;
         }
     }
 }
