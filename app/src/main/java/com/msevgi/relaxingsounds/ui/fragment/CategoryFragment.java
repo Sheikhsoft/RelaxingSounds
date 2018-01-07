@@ -10,14 +10,13 @@ import android.view.View;
 import android.view.ViewGroup;
 
 import com.msevgi.relaxingsounds.R;
-import com.msevgi.relaxingsounds.ui.activity.MediaBaseActivity;
-import com.msevgi.relaxingsounds.utils.ToolbarOptions;
 import com.msevgi.relaxingsounds.adapter.CategoryRecyclerAdapter;
-import com.msevgi.relaxingsounds.data.DataState;
 import com.msevgi.relaxingsounds.data.DataWrapper;
 import com.msevgi.relaxingsounds.databinding.CategoryListBinding;
 import com.msevgi.relaxingsounds.model.Category;
 import com.msevgi.relaxingsounds.ui.activity.MainActivity;
+import com.msevgi.relaxingsounds.ui.activity.MediaBaseActivity;
+import com.msevgi.relaxingsounds.utils.ToolbarOptions;
 import com.msevgi.relaxingsounds.viewmodel.CategoryViewModel;
 
 import java.util.List;
@@ -45,10 +44,7 @@ public class CategoryFragment extends BaseFragment implements CategoryRecyclerAd
         mCategoryViewModel.getCategoryLiveData().observe(this, new Observer<DataWrapper<List<Category>>>() {
             @Override
             public void onChanged(@Nullable DataWrapper<List<Category>> listDataWrapper) {
-                if (listDataWrapper.getState().ordinal() == DataState.SUCCESS.ordinal()) {
-                    mBinding.setDataWrapper(listDataWrapper);
-                }
-
+                mBinding.setDataWrapper(listDataWrapper);
             }
         });
     }

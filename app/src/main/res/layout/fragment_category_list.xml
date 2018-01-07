@@ -38,6 +38,10 @@
             app:categoryEntries="@{dataWrapper.getData()}"
             app:listener="@{listener}" />
 
+        <include
+            layout="@layout/empty_view"
+            app:rsError="@{dataWrapper.getRSError()}" />
+
         <ProgressBar
             style="@style/DefaultProgressBar"
             android:visibility="@{dataWrapper}" />

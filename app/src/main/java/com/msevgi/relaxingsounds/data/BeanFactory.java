@@ -13,7 +13,7 @@ public final class BeanFactory {
         return new UIDataWrapper<>(data, DataState.SUCCESS, null);
     }
 
-    public static <T> DataWrapper error(T data, Error error) {
+    public static <T> DataWrapper error(T data, RSError error) {
         return new UIDataWrapper<>(data, DataState.ERROR, error);
     }
 

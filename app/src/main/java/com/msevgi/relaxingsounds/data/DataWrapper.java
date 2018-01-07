@@ -9,5 +9,5 @@ public interface DataWrapper<T> {
 
     DataState getState();
 
-    Error getError();
+    RSError getRSError();
 }

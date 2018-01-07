@@ -34,8 +34,12 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/toolbar"
-            app:soundEntries="@{dataWrapper.getData()}"
-            app:listener="@{listener}"/>
+            app:listener="@{listener}"
+            app:soundEntries="@{dataWrapper.getData()}" />
+
+        <include
+            layout="@layout/empty_view"
+            app:rsError="@{dataWrapper.getRSError()}" />
 
         <ProgressBar
             style="@style/DefaultProgressBar"

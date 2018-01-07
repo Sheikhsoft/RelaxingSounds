@@ -1,11 +1,14 @@
 package com.msevgi.relaxingsounds.ui.fragment;
 
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.databinding.DataBindingUtil;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v4.media.MediaMetadataCompat;
@@ -16,16 +19,20 @@ import android.view.ViewGroup;
 
 import com.msevgi.relaxingsounds.R;
 import com.msevgi.relaxingsounds.adapter.SoundRecyclerAdapter;
+import com.msevgi.relaxingsounds.data.DataWrapper;
 import com.msevgi.relaxingsounds.databinding.SoundListBinding;
+import com.msevgi.relaxingsounds.model.Category;
 import com.msevgi.relaxingsounds.model.Sound;
 import com.msevgi.relaxingsounds.player.LogHelper;
 import com.msevgi.relaxingsounds.player.PlaybackManager;
 import com.msevgi.relaxingsounds.player.service.MusicService;
 import com.msevgi.relaxingsounds.ui.activity.MediaBaseActivity;
 import com.msevgi.relaxingsounds.viewmodel.SoundViewModel;
+import com.msevgi.relaxingsounds.viewmodel.factory.SoundViewModelFactory;
 
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -33,6 +40,7 @@ import java.util.Set;
  */
 
 public abstract class BaseSoundsFragment extends BaseFragment implements SoundRecyclerAdapter.SoundItemClickListener {
+    public static final String EXTRA_CATEGORY = "extra.category";
     public final String TAG = LogHelper.makeLogTag(BaseSoundsFragment.class);
     protected SoundListBinding mBinding;
     protected SoundViewModel mSoundViewModel;
@@ -76,6 +84,27 @@ public abstract class BaseSoundsFragment extends BaseFragment implements SoundRe
     }
 
     @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        mBinding.setListener(this);
+
+        Category category = null;
+        if (getArguments() != null) {
+            category = (Category) getArguments().getParcelable(EXTRA_CATEGORY);
+        }
+
+        SoundViewModelFactory factory = new SoundViewModelFactory(category);
+        mSoundViewModel = ViewModelProviders.of(this, factory).get(SoundViewModel.class);
+        mSoundViewModel.getSoundLiveData().observe(this, new Observer<DataWrapper<List<Sound>>>() {
+            @Override
+            public void onChanged(@Nullable DataWrapper<List<Sound>> listDataWrapper) {
+                mBinding.setDataWrapper(listDataWrapper);
+                updatePlayingRows();
+            }
+        });
+    }
+
+    @Override
     public void playOrPause(Sound sound, int position) {
         playOrPause(sound);
     }
@@ -111,7 +140,7 @@ public abstract class BaseSoundsFragment extends BaseFragment implements SoundRe
             MediaMetadataCompat metadataCompat = supportController.getMetadata();
             if (metadataCompat != null) {
                 String[] ids = metadataCompat.getBundle().getStringArray(MusicService.EXTRA_PLAYING_IDS);
-                if (ids != null) {
+                if (ids != null && ids.length > 0) {
                     Set<String> set = new HashSet<String>(Arrays.asList(ids));
                     mSoundViewModel.updatePlayingRows(mBinding.getDataWrapper().getData(), set);
                     if (mBinding.recyclerviewProducts.getAdapter() != null) {

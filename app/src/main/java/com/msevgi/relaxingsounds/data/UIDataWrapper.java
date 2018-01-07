@@ -7,9 +7,9 @@ package com.msevgi.relaxingsounds.data;
 public class UIDataWrapper<T, C> implements DataWrapper<T> {
     private T data;
     private DataState dataState;
-    private Error error;
+    private RSError error;
 
-    public UIDataWrapper(T data, DataState dataState, Error error) {
+    public UIDataWrapper(T data, DataState dataState, RSError error) {
         this.data = data;
         this.dataState = dataState;
         this.error = error;
@@ -26,7 +26,7 @@ public class UIDataWrapper<T, C> implements DataWrapper<T> {
     }
 
     @Override
-    public Error getError() {
+    public RSError getRSError() {
         return error;
     }
 

@@ -8,4 +8,7 @@
 
     <string name="notification_channel">RS_Channel_ID</string>
     <string name="notification_channel_description">Channel ID for RS</string>
+    <string name="no_connection">İnternet bağlantınız yok.</string>
+    <string name="no_category">Hiç kategori yok.</string>
+    <string name="default_error">Bilinmeyen bir hata oluştu. Tekrar deneyiniz.</string>
 </resources>
