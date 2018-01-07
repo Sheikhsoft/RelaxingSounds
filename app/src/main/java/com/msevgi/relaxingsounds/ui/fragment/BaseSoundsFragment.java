@@ -19,8 +19,8 @@ import com.msevgi.relaxingsounds.adapter.SoundRecyclerAdapter;
 import com.msevgi.relaxingsounds.databinding.SoundListBinding;
 import com.msevgi.relaxingsounds.model.Sound;
 import com.msevgi.relaxingsounds.player.LogHelper;
-import com.msevgi.relaxingsounds.player.service.MusicService;
 import com.msevgi.relaxingsounds.player.PlaybackManager;
+import com.msevgi.relaxingsounds.player.service.MusicService;
 import com.msevgi.relaxingsounds.ui.activity.MediaBaseActivity;
 import com.msevgi.relaxingsounds.viewmodel.SoundViewModel;
 
@@ -36,6 +36,7 @@ public abstract class BaseSoundsFragment extends BaseFragment implements SoundRe
     public final String TAG = LogHelper.makeLogTag(BaseSoundsFragment.class);
     protected SoundListBinding mBinding;
     protected SoundViewModel mSoundViewModel;
+
     BroadcastReceiver mediaUpdatedReceiver = new BroadcastReceiver() {
         @Override
         public void onReceive(Context context, Intent intent) {
@@ -106,15 +107,16 @@ public abstract class BaseSoundsFragment extends BaseFragment implements SoundRe
 
     public void updatePlayingRows() {
         MediaControllerCompat supportController = MediaControllerCompat.getMediaController(getActivity());
-        MediaMetadataCompat metadataCompat;
         if (supportController != null) {
-            metadataCompat = supportController.getMetadata();
+            MediaMetadataCompat metadataCompat = supportController.getMetadata();
             if (metadataCompat != null) {
                 String[] ids = metadataCompat.getBundle().getStringArray(MusicService.EXTRA_PLAYING_IDS);
-                Set<String> set = new HashSet<String>(Arrays.asList(ids));
-                mSoundViewModel.updatePlayingRows(mBinding.getDataWrapper().getData(), set);
-                if (mBinding.recyclerviewProducts.getAdapter() != null) {
-                    mBinding.recyclerviewProducts.getAdapter().notifyDataSetChanged();
+                if (ids != null) {
+                    Set<String> set = new HashSet<String>(Arrays.asList(ids));
+                    mSoundViewModel.updatePlayingRows(mBinding.getDataWrapper().getData(), set);
+                    if (mBinding.recyclerviewProducts.getAdapter() != null) {
+                        mBinding.recyclerviewProducts.getAdapter().notifyDataSetChanged();
+                    }
                 }
             }
         }

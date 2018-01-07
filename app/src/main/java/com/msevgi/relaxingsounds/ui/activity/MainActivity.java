@@ -6,6 +6,7 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.BottomNavigationView;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v4.media.MediaMetadataCompat;
 import android.support.v4.media.session.MediaControllerCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
@@ -66,39 +67,27 @@ public class MainActivity extends MediaBaseActivity implements View.OnClickListe
 
     @Override
     public void onBackPressed() {
-        Fragment fragment = getSupportFragmentManager().findFragmentById(R.id.flContainer);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        Fragment fragment = fragmentManager.findFragmentById(R.id.flContainer);
         if (fragment instanceof CategoryFragment) {
             finish();
-        } else
+        } else {
+            fragmentManager.popBackStackImmediate();
+
+            arrangeBottomNavigationToCurrentFragment();
+
             super.onBackPressed();
+        }
     }
 
     @Override
-    public void sessionConnected() {
+    protected void sessionConnected() {
         updateMiniPlayer();
     }
 
     @Override
     protected void onStateChanged(PlaybackStateCompat state) {
         updateMiniPlayer();
-    }
-
-    private void updateMiniPlayer() {
-        MediaControllerCompat supportController = MediaControllerCompat.getMediaController(this);
-        MediaMetadataCompat metadataCompat;
-        if (supportController != null) {
-            metadataCompat = supportController.getMetadata();
-            if (metadataCompat != null) {
-                String[] ids = metadataCompat.getBundle().getStringArray(MusicService.EXTRA_PLAYING_IDS);
-                if (ids != null && ids.length > 0) {
-                    isPlaying = true;
-                    mBinding.ivPlayPause.setImageResource(R.drawable.ic_pause);
-                } else {
-                    isPlaying = false;
-                    mBinding.ivPlayPause.setImageResource(R.drawable.ic_play);
-                }
-            }
-        }
     }
 
     @Override
@@ -118,5 +107,36 @@ public class MainActivity extends MediaBaseActivity implements View.OnClickListe
                 }
                 break;
         }
+    }
+
+    private void updateMiniPlayer() {
+        MediaControllerCompat supportController = MediaControllerCompat.getMediaController(this);
+        MediaMetadataCompat metadataCompat;
+        if (supportController != null) {
+            metadataCompat = supportController.getMetadata();
+            if (metadataCompat != null) {
+                String[] ids = metadataCompat.getBundle().getStringArray(MusicService.EXTRA_PLAYING_IDS);
+                if (ids != null && ids.length > 0) {
+                    mBinding.rlPlayer.setVisibility(View.VISIBLE);
+                    isPlaying = true;
+                    mBinding.ivPlayPause.setImageResource(R.drawable.ic_pause);
+                } else {
+                    mBinding.rlPlayer.setVisibility(View.GONE);
+                    isPlaying = false;
+                    mBinding.ivPlayPause.setImageResource(R.drawable.ic_play);
+                }
+            }
+        }
+    }
+
+    private void arrangeBottomNavigationToCurrentFragment() {
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        int backStackCount = fragmentManager.getBackStackEntryCount();
+        FragmentManager.BackStackEntry backStackEntry = fragmentManager.getBackStackEntryAt(backStackCount - 1);
+        String fragmentName = backStackEntry.getName();
+        if (fragmentName.equals(LikedSoundsFragment.class.getName())) {
+            mBinding.navigation.setSelectedItemId(R.id.navigation_favorites);
+        } else
+            mBinding.navigation.setSelectedItemId(R.id.navigation_home);
     }
 }

@@ -294,7 +294,7 @@ public class LocalPlayback implements Playback, AudioManager.OnAudioFocusChangeL
      * null, so if you are calling it, you have to do so from a context where
      * you are sure this is the case.
      */
-    private void configMediaPlayerState(boolean all) {
+    private void configMediaPlayerState(boolean allPlayers) {
         if (mAudioFocus == AUDIO_NO_FOCUS_NO_DUCK) {
             // If we don't have audio focus and can't duck, we have to pause,
             if (mState == PlaybackStateCompat.STATE_PLAYING) {
@@ -311,7 +311,7 @@ public class LocalPlayback implements Playback, AudioManager.OnAudioFocusChangeL
             }
             // If we were playing when we lost focus, we need to resume playing.
             if (mPlayOnFocusGain) {
-                if (all) {
+                if (allPlayers) {
                     for (MediaPlayer mediaPlayer : mPlayers.values()) {
                         if (mediaPlayer != null && !mediaPlayer.isPlaying()) {
                             mediaPlayer.start();

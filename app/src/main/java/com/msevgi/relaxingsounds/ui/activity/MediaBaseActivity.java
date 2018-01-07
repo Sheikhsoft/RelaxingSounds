@@ -37,26 +37,6 @@ public abstract class MediaBaseActivity extends AppCompatActivity {
 
     private MediaBrowserCompat mMediaBrowser;
 
-    private MediaControllerCompat.Callback mMediaControllerCallback =
-            new MediaControllerCompat.Callback() {
-                @Override
-                public void onPlaybackStateChanged(@NonNull PlaybackStateCompat state) {
-                    Bundle bundle = new Bundle();
-                    bundle.putInt(EXTRA_STATE, state.getState());
-                    sendBroadcastIntentForAction(ACTION_PLAY_STATE_CHANGED, bundle);
-                    onStateChanged(state);
-                }
-
-                @Override
-                public void onMetadataChanged(MediaMetadataCompat metadata) {
-                }
-            };
-
-    protected void onStateChanged(PlaybackStateCompat state) {
-    }
-
-    ;
-
     private MediaBrowserCompat.ConnectionCallback mConnectionCallback =
             new MediaBrowserCompat.ConnectionCallback() {
                 @Override
@@ -76,6 +56,24 @@ public abstract class MediaBaseActivity extends AppCompatActivity {
                 }
             };
 
+    private MediaControllerCompat.Callback mMediaControllerCallback =
+            new MediaControllerCompat.Callback() {
+                @Override
+                public void onPlaybackStateChanged(@NonNull PlaybackStateCompat state) {
+                    Bundle bundle = new Bundle();
+                    bundle.putInt(EXTRA_STATE, state.getState());
+                    sendBroadcastIntentForAction(ACTION_PLAY_STATE_CHANGED, bundle);
+                    onStateChanged(state);
+                }
+
+                @Override
+                public void onMetadataChanged(MediaMetadataCompat metadata) {
+                }
+            };
+
+    protected abstract void onStateChanged(PlaybackStateCompat state);
+
+    protected abstract void sessionConnected();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -101,8 +99,10 @@ public abstract class MediaBaseActivity extends AppCompatActivity {
         MediaControllerCompat mediaController = MediaControllerCompat.getMediaController(this);
         if (mediaController != null)
             mediaController.unregisterCallback(mMediaControllerCallback);
+
         mMediaControllerCallback = null;
         mConnectionCallback = null;
+
         mMediaBrowser = null;
         super.onDestroy();
     }
@@ -117,10 +117,6 @@ public abstract class MediaBaseActivity extends AppCompatActivity {
         mediaController.registerCallback(mMediaControllerCallback);
         sendBroadcastIntentForAction(ACTION_SESSION_CONNECTED, null);
         sessionConnected();
-    }
-
-    public void sessionConnected() {
-
     }
 
     protected void sendBroadcastIntentForAction(String action, Bundle bundle) {
