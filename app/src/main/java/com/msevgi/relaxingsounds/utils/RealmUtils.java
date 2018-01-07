@@ -71,19 +71,15 @@ public class RealmUtils {
     }
 
     public static List<Sound> readLikedSoundsFromRealm() {
+        Realm instance = Realm.getDefaultInstance();
+        RealmSound realmSound = instance.where(RealmSound.class).equalTo("id", RealmSound.KEY).findFirst();
         final List<Sound> list = new ArrayList<>();
-        Realm realm = Realm.getDefaultInstance();
-        realm.executeTransaction(new Realm.Transaction() {
-            @Override
-            public void execute(Realm realm) {
-                RealmSound realmSound = realm.where(RealmSound.class).equalTo("id", RealmSound.KEY).findFirst();
-                if (realmSound != null && realmSound.getLikedSoundList().size() > 0) {
-                    for (Sound sound : realmSound.getLikedSoundList()) {
-                        list.add(new Sound(sound.getId(), sound.getName(), sound.getCategory(), sound.isFavorite(), sound.isPlaying(), sound.getVolume(), sound.getUri()));
-                    }
-                }
+        if (realmSound != null) {
+            for (Sound sound : realmSound.getLikedSoundList()) {
+                list.add(new Sound(sound.getId(), sound.getName(), sound.getCategory(), sound.isFavorite(), sound.isPlaying(), sound.getVolume(), sound.getUri()));
             }
-        });
-        return list;
+            return list;
+        }
+        return null;
     }
 }

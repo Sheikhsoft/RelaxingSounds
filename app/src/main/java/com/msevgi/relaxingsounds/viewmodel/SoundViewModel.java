@@ -45,8 +45,12 @@ public class SoundViewModel extends ViewModel {
     public void getLikedSounds() {
         soundLiveData.setValue(BeanFactory.fetching(null));
 
-        if (likedSoundLiveData.getValue() != null && likedSoundLiveData.getValue().size() > 0) {
-            soundLiveData.setValue(BeanFactory.success(likedSoundLiveData.getValue()));
+        if (likedSoundLiveData.getValue() != null) {
+            if (likedSoundLiveData.getValue().size() == 0) {
+                soundLiveData.setValue(BeanFactory.error(null,new RSError(RSError.NO_RESULT,R.string.no_liked_sound)));
+            } else {
+                soundLiveData.setValue(BeanFactory.success(likedSoundLiveData.getValue()));
+            }
         } else {
             ApiModule.getInstance().getService().serviceCategorySoundList().enqueue(new RetrofitCallback<ArrayList<Sound>>() {
                 @Override

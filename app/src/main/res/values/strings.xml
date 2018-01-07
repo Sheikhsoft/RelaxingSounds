@@ -11,4 +11,5 @@
     <string name="no_connection">İnternet bağlantınız yok.</string>
     <string name="no_category">Hiç kategori yok.</string>
     <string name="default_error">Bilinmeyen bir hata oluştu. Tekrar deneyiniz.</string>
+    <string name="no_liked_sound">Hiç beğendiğiniz ses yok.</string>
 </resources>
