@@ -35,7 +35,7 @@ public class MainActivity extends MediaBaseActivity implements View.OnClickListe
                     showFragment(new CategoryFragment(), TRANSITION_TYPE_REPLACE);
                     return true;
                 case R.id.navigation_favorites:
-                    showFragment(new LikedSoundsFragment(), TRANSITION_TYPE_ADD);
+                    showFragment(new LikedSoundsFragment(), TRANSITION_TYPE_REPLACE);
                     return true;
             }
             return false;

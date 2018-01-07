@@ -47,7 +47,7 @@ public class SoundViewModel extends ViewModel {
 
         if (likedSoundLiveData.getValue() != null) {
             if (likedSoundLiveData.getValue().size() == 0) {
-                soundLiveData.setValue(BeanFactory.error(null,new RSError(RSError.NO_RESULT,R.string.no_liked_sound)));
+                soundLiveData.setValue(BeanFactory.error(null, new RSError(RSError.NO_RESULT, R.string.no_liked_sound)));
             } else {
                 soundLiveData.setValue(BeanFactory.success(likedSoundLiveData.getValue()));
             }
@@ -126,6 +126,12 @@ public class SoundViewModel extends ViewModel {
                 } else
                     sound.setPlaying(false);
             }
+        }
+    }
+
+    public void updateEmptyCase() {
+        if (soundLiveData.getValue() != null && soundLiveData.getValue().getData().size() == 0) {
+            soundLiveData.setValue(BeanFactory.error(null, new RSError(RSError.NO_RESULT, R.string.no_liked_sound)));
         }
     }
 }

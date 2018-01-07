@@ -28,7 +28,7 @@ public class BindingUtils {
     public static void setCategoryEntries(RecyclerView recyclerView,
                                           List<Category> entries, CategoryRecyclerAdapter.CategoryItemClickListener itemClickListener) {
         if (entries != null) {
-            LinearLayoutManager manager = new LinearLayoutManager(recyclerView.getContext(), LinearLayoutManager.VERTICAL, false);
+            LinearLayoutManager manager = new LinearLayoutManager(recyclerView.getContext());
             recyclerView.setLayoutManager(manager);
 
             recyclerView.setHasFixedSize(true);
@@ -45,7 +45,7 @@ public class BindingUtils {
     public static void setSoundEntries(RecyclerView recyclerView,
                                        List<Sound> entries, SoundRecyclerAdapter.SoundItemClickListener itemClickListener) {
         if (entries != null) {
-            LinearLayoutManager manager = new LinearLayoutManager(recyclerView.getContext(), LinearLayoutManager.VERTICAL, false);
+            LinearLayoutManager manager = new LinearLayoutManager(recyclerView.getContext());
             recyclerView.setLayoutManager(manager);
 
             recyclerView.setHasFixedSize(true);

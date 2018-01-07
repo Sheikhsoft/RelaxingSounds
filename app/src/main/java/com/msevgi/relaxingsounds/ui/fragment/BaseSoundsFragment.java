@@ -27,6 +27,7 @@ import com.msevgi.relaxingsounds.player.LogHelper;
 import com.msevgi.relaxingsounds.player.PlaybackManager;
 import com.msevgi.relaxingsounds.player.service.MusicService;
 import com.msevgi.relaxingsounds.ui.activity.MediaBaseActivity;
+import com.msevgi.relaxingsounds.utils.RealmUtils;
 import com.msevgi.relaxingsounds.viewmodel.SoundViewModel;
 import com.msevgi.relaxingsounds.viewmodel.factory.SoundViewModelFactory;
 
@@ -111,7 +112,16 @@ public abstract class BaseSoundsFragment extends BaseFragment implements SoundRe
 
     @Override
     public void likeOrUnlike(Sound sound, int position) {
-        // TODO: 7.01.2018 show message to user
+        if (sound.isFavorite()) {
+            sound.setFavorite(false);
+            RealmUtils.removeSoundFromRealm(sound);
+        } else {
+            sound.setFavorite(true);
+            RealmUtils.saveSoundToRealm(sound);
+        }
+
+        mBinding.recyclerviewProducts.getAdapter().notifyItemChanged(position);
+
     }
 
     @Override

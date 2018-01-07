@@ -1,6 +1,7 @@
 package com.msevgi.relaxingsounds.ui.fragment;
 
 import com.msevgi.relaxingsounds.R;
+import com.msevgi.relaxingsounds.model.Sound;
 import com.msevgi.relaxingsounds.utils.ToolbarOptions;
 
 /**
@@ -8,6 +9,16 @@ import com.msevgi.relaxingsounds.utils.ToolbarOptions;
  */
 
 public class LikedSoundsFragment extends BaseSoundsFragment {
+
+    @Override
+    public void likeOrUnlike(Sound sound, int position) {
+        super.likeOrUnlike(sound, position);
+        if (!sound.isFavorite()) {
+            mBinding.getDataWrapper().getData().remove(position);
+            mBinding.recyclerviewProducts.getAdapter().notifyItemRemoved(position);
+            mSoundViewModel.updateEmptyCase();
+        }
+    }
 
     @Override
     ToolbarOptions getToolbarOptions() {

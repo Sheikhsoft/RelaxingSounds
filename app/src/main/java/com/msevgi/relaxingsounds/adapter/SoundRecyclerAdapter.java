@@ -80,19 +80,6 @@ public class SoundRecyclerAdapter extends RecyclerView.Adapter<SoundRecyclerAdap
         public void onClick(View v) {
             switch (v.getId()) {
                 case R.id.ivLikeUnlike:
-                    Sound sound = mList.get(getAdapterPosition());
-
-                    if (sound.isFavorite()) {
-                        sound.setFavorite(false);
-                        RealmUtils.removeSoundFromRealm(sound);
-                    } else {
-                        sound.setFavorite(true);
-                        RealmUtils.saveSoundToRealm(sound);
-                    }
-
-                    notifyItemChanged(getAdapterPosition());
-
-                    //if you want to show toast vs, you can use likeOrUnlike method implementation
                     if (mListener != null) {
                         mListener.likeOrUnlike(mList.get(getAdapterPosition()), getAdapterPosition());
                     }
