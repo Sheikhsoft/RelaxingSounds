@@ -82,7 +82,7 @@ public abstract class BaseSoundsFragment extends BaseFragment implements SoundRe
 
     @Override
     public void likeOrUnlike(Sound sound, int position) {
-
+        // TODO: 7.01.2018 show message to user
     }
 
     @Override

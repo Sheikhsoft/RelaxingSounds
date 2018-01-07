@@ -28,6 +28,7 @@
             android:layout_height="60dp"
             android:background="#C8E6C9"
             android:padding="@dimen/default_padding"
+            android:visibility="gone"
             app:layout_constraintBottom_toTopOf="@+id/navigation"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent">

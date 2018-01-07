@@ -3,12 +3,15 @@ package com.msevgi.relaxingsounds.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import io.realm.RealmObject;
+import io.realm.annotations.PrimaryKey;
+
 /**
  * Created by mustafasevgi on 3.01.2018.
  */
 
-public class Sound implements Parcelable {
-
+public class Sound extends RealmObject implements Parcelable {
+    @PrimaryKey
     private String id;
     private String name;
     private String category;
@@ -16,6 +19,19 @@ public class Sound implements Parcelable {
     private boolean isPlaying = false;
     private int volume = 25;
     private String uri;
+
+    public Sound() {
+    }
+
+    public Sound(String id, String name, String category, boolean isFavorite, boolean isPlaying, int volume, String uri) {
+        this.id = id;
+        this.name = name;
+        this.category = category;
+        this.isFavorite = isFavorite;
+        this.isPlaying = isPlaying;
+        this.volume = volume;
+        this.uri = uri;
+    }
 
     public String getUri() {
         return uri;
@@ -74,9 +90,6 @@ public class Sound implements Parcelable {
         isFavorite = favorite;
     }
 
-    public Sound() {
-    }
-
     @Override
     public int describeContents() {
         return 0;
@@ -114,4 +127,17 @@ public class Sound implements Parcelable {
             return new Sound[size];
         }
     };
+
+    @Override
+    public boolean equals(Object obj) {
+        if (obj != null) {
+            if (obj instanceof Sound) {
+                if (((Sound) obj).getId().equals(getId())) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
 }

@@ -4,12 +4,13 @@ import android.arch.lifecycle.MutableLiveData;
 import android.arch.lifecycle.ViewModel;
 import android.support.annotation.NonNull;
 
-import com.msevgi.relaxingsounds.R;
 import com.msevgi.relaxingsounds.api.ApiModule;
 import com.msevgi.relaxingsounds.data.BeanFactory;
 import com.msevgi.relaxingsounds.data.DataWrapper;
 import com.msevgi.relaxingsounds.model.Category;
 import com.msevgi.relaxingsounds.model.Sound;
+import com.msevgi.relaxingsounds.player.LogHelper;
+import com.msevgi.relaxingsounds.utils.RealmUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +25,16 @@ import retrofit2.Response;
  */
 
 public class SoundViewModel extends ViewModel {
+    private final static String TAG = LogHelper.makeLogTag(SoundViewModel.class);
     private final MutableLiveData<DataWrapper<List<Sound>>> soundLiveData;
+    private final MutableLiveData<List<Sound>> likedSoundLiveData;
 
     public SoundViewModel(Category category) {
         soundLiveData = new MutableLiveData<>();
+
+        likedSoundLiveData = new MutableLiveData<>();
+        likedSoundLiveData.setValue(RealmUtils.readLikedSoundsFromRealm());
+
         if (category != null) {
             getCategorySounds(category);
         } else {
@@ -37,27 +44,35 @@ public class SoundViewModel extends ViewModel {
 
     public void getLikedSounds() {
         soundLiveData.setValue(BeanFactory.fetching(null));
-
-        ApiModule.getInstance().getService().serviceCategorySoundList().enqueue(new Callback<ArrayList<Sound>>() {
-            @Override
-            public void onResponse(Call<ArrayList<Sound>> call, @NonNull Response<ArrayList<Sound>> response) {
-                if (response.body() != null && response.body().size() > 0) {
-                    soundLiveData.setValue(BeanFactory.success(response.body()));
+        if (likedSoundLiveData.getValue().size() > 0) {
+            soundLiveData.setValue(BeanFactory.success(likedSoundLiveData.getValue()));
+        } else {
+            ApiModule.getInstance().getService().serviceCategorySoundList().enqueue(new Callback<ArrayList<Sound>>() {
+                @Override
+                public void onResponse(Call<ArrayList<Sound>> call, @NonNull Response<ArrayList<Sound>> response) {
+                    if (response.body() != null && response.body().size() > 0) {
+                        List<Sound> list = new ArrayList<>();
+                        for (Sound sound : response.body()) {
+                            if (sound.isFavorite()) {
+                                list.add(sound);
+                            }
+                        }
+                        RealmUtils.saveLikedSoundsToRealm(list);
+                        soundLiveData.setValue(BeanFactory.success(list));
+                    }
                 }
-            }
 
-            @Override
-            public void onFailure(Call<ArrayList<Sound>> call, Throwable t) {
-                soundLiveData.setValue(BeanFactory.error(null, null));
-            }
-        });
-
+                @Override
+                public void onFailure(Call<ArrayList<Sound>> call, Throwable t) {
+                    soundLiveData.setValue(BeanFactory.error(null, null));
+                }
+            });
+        }
     }
 
 
     public void getCategorySounds(final Category category) {
         soundLiveData.setValue(BeanFactory.fetching(null));
-
         ApiModule.getInstance().getService().serviceCategorySoundList().enqueue(new Callback<ArrayList<Sound>>() {
             @Override
             public void onResponse(Call<ArrayList<Sound>> call, @NonNull Response<ArrayList<Sound>> response) {
@@ -65,6 +80,11 @@ public class SoundViewModel extends ViewModel {
                     List<Sound> list = new ArrayList<>();
                     for (Sound sound : response.body()) {
                         if (sound.getCategory().equalsIgnoreCase(category.getKey())) {
+                            if (likedSoundLiveData.getValue().contains(sound)) {
+                                sound.setFavorite(true);
+                            } else {
+                                sound.setFavorite(false);
+                            }
                             list.add(sound);
                         }
                     }
@@ -77,7 +97,6 @@ public class SoundViewModel extends ViewModel {
                 soundLiveData.setValue(BeanFactory.error(null, null));
             }
         });
-
     }
 
     public MutableLiveData<DataWrapper<List<Sound>>> getSoundLiveData() {
